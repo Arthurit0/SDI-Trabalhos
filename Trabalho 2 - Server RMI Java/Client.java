@@ -2,7 +2,10 @@
  * O cliente deve executar as operações com as matrizes e salvar os dados (recuperar e por fim excluir o arquivo)
  */
 
-public class Client {
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+
+ public class Client {
     public static void main(String[] args) {
       String hostM = args[0];
       String hostDB = args[1];
