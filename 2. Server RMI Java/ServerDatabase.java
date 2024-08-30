@@ -23,9 +23,7 @@ public class ServerDatabase implements IDatabase{
 
   @Override
   public void save(double[][] a, String filename) throws RemoteException{
-    String path = filename + ".csv";
-
-    try(PrintWriter escrita = new PrintWriter(new File(path));){
+    try(PrintWriter escrita = new PrintWriter(new File(filename));){
       for(int i = 0; i < a.length; i++) {
         for(int j = 0; j < a[i].length; j++){
           escrita.print(a[i][j] + ",");
@@ -41,9 +39,8 @@ public class ServerDatabase implements IDatabase{
   @Override
   public double[][] load(String filename) throws RemoteException{
     double[][] matriz = null;
-    String path = filename + ".csv";
 
-    try(FileReader leitorR = new FileReader(path); BufferedReader leitorB = new BufferedReader(leitorR);){
+    try(FileReader leitorR = new FileReader(filename); BufferedReader leitorB = new BufferedReader(leitorR);){
 
       List<double[]> colunas = new ArrayList<>();
       String linha = null;
@@ -63,10 +60,9 @@ public class ServerDatabase implements IDatabase{
 
   @Override
   public void remove(String filename) throws RemoteException{
-    String path = filename + ".csv";
 
     try {
-      File file = new File(path);
+      File file = new File(filename);
 
       if(file.exists()){
         file.delete();

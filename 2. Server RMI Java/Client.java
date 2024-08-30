@@ -11,11 +11,11 @@ import java.rmi.registry.Registry;
       String hostDB = args[1];
 
       try {
-         Registry registryMatrix = LocateRegistry.getRegistry(hostM,6600);
-         Registry registryDB = LocateRegistry.getRegistry(hostDB,6677);
+         Registry registryMatrix = LocateRegistry.getRegistry(hostM,12344);
+         Registry registryDB = LocateRegistry.getRegistry(hostDB,12345);
 
-         IMatrix matrix_stub = (IMatrix) registryMatrix.lookup("matrix_service");
-         IDatabase database_stub = (IDatabase) registryDB.lookup("database_service");
+         IMatrix matrix_stub = (IMatrix) registryMatrix.lookup("matrix-server");
+         IDatabase database_stub = (IDatabase) registryDB.lookup("db-server");
          double[][] a = matrix_stub.randfill(100, 100);
          double[][] b = matrix_stub.randfill(100, 100);
          double[][] c = matrix_stub.mult(a, b);
