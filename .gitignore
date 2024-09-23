@@ -2,3 +2,4 @@
 lib64
 *.class
 *.cfg
+*.log
