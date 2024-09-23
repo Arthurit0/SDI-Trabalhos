@@ -7,9 +7,10 @@ import json
 import logging
 
 # Configuração Servidor
-SERVER_ADDRESS = ("localhost", 12345)
+# SERVER_ADDRESS = ("localhost", 12345)
+SERVER_ADDRESS = ("10.20.221.235", 12345)
 MIN_WAIT_TIME = 5
-MAX_WAIT_TIME = 10
+MAX_WAIT_TIME = 8
 
 # Configuração Logs
 logging.basicConfig(
@@ -75,28 +76,31 @@ def recebe_veiculo(connection, address):
 
 
 def iniciar_servidor():
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
-        server_socket.bind(SERVER_ADDRESS)
-        server_socket.listen(5)
-        logging.info("Servidor: Aguardando conexões...")
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+            server_socket.bind(SERVER_ADDRESS)
+            server_socket.listen(5)
+            logging.info("Servidor: Aguardando conexões...")
 
-        for servico, fila in filas.items():
-            threading.Thread(
-                target=processar_fila, args=(servico, fila), daemon=True
-            ).start()
+            for servico, fila in filas.items():
+                threading.Thread(
+                    target=processar_fila, args=(servico, fila), daemon=True
+                ).start()
 
-        while True:
-            connection, address = server_socket.accept()
-            threading.Thread(
-                target=recebe_veiculo, args=(connection, address), daemon=True
-            ).start()
+            while True:
+                connection, address = server_socket.accept()
+                threading.Thread(
+                    target=recebe_veiculo, args=(connection, address), daemon=True
+                ).start()
+    except KeyboardInterrupt:
+        logging.info("Interrompendo sistema.")
 
 
 def log_estado_fila(servico):
     fila = filas[servico]
     veiculos_fila = list(fila.queue)
     placas_fila = [veiculo[0]["placa"] for veiculo in veiculos_fila]
-    logging.info(f"Estado da fila {servico}: Veículos aguardando: {placas_fila}")
+    logging.info(f"Estado da fila {servico}: {placas_fila}")
 
 
 if __name__ == "__main__":

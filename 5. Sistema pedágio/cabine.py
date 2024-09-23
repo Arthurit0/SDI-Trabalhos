@@ -7,9 +7,10 @@ import threading
 import logging
 
 # Configuração Cliente
-SERVER_ADDRESS = ("localhost", 12345)
-MIN_WAIT_TIME = 0.5
-MAX_WAIT_TIME = 2
+# SERVER_ADDRESS = ("localhost", 12345)
+SERVER_ADDRESS = ("10.20.221.235", 12345)
+MIN_WAIT_TIME = 2
+MAX_WAIT_TIME = 5
 
 # Configuração Logs
 logging.basicConfig(
@@ -57,13 +58,18 @@ def enviar_veiculo(veiculo):
 
 
 def simular_pedagio():
-    while True:
-        veiculo = gerar_veiculo()
-        logging.info(f"Cabine: Enviando veículo {veiculo['placa']} para o servidor.")
+    try:
+        while True:
+            veiculo = gerar_veiculo()
+            logging.info(
+                f"Cabine: Enviando veículo {veiculo['placa']} para o servidor."
+            )
 
-        threading.Thread(target=enviar_veiculo, args=(veiculo,)).start()
+            threading.Thread(target=enviar_veiculo, args=(veiculo,)).start()
 
-        time.sleep(random.uniform(MIN_WAIT_TIME, MAX_WAIT_TIME))
+            time.sleep(random.uniform(MIN_WAIT_TIME, MAX_WAIT_TIME))
+    except KeyboardInterrupt:
+        logging.info("Interrompendo e aguardando veículos restantes serem processados.")
 
 
 if __name__ == "__main__":
